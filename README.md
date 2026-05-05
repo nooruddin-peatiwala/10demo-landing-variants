@@ -4,13 +4,13 @@ Three landing-page redesigns of [10demo.com](https://10demo.com), built to A/B t
 
 ## Live URLs
 
-> Filled in after first deploy. Each URL serves only one variant — no switcher visible to end users.
+Each URL serves only one variant — no switcher visible to end users, no signal that alternatives exist.
 
 | | Variant | Hypothesis | URL |
 |---|---|---|---|
-| **A** | Outcome-Led | B2B buyers convert faster when they see the dollar outcome up front, not a clever joke. ROI is the hook. | _pending_ |
-| **B** | Product-Led | The product is visual enough that watching it sells better than reading about it. Mock chat widget in hero. | _pending_ |
-| **C** | Brand-Led | Personality and memorability beat yet-another-feature-grid. Calendar joke amplified to centerpiece. | _pending_ |
+| **A** | Outcome-Led | B2B buyers convert faster when they see the dollar outcome up front, not a clever joke. ROI is the hook. | <https://10demo-variant-a.vercel.app> |
+| **B** | Product-Led | The product is visual enough that watching it sells better than reading about it. Mock chat widget in hero. | <https://10demo-variant-b.vercel.app> |
+| **C** | Brand-Led | Personality and memorability beat yet-another-feature-grid. Calendar joke amplified to centerpiece. | <https://10demo-variant-c.vercel.app> |
 
 ## Repo layout
 
