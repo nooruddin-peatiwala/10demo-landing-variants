@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10demo — Stop making leads wait for demo calls</title>
+<link rel="stylesheet" href="assets/brand.css" />
+<style>
+  /* ============ Variant C — BRAND-LED specific overrides ============
+     Hypothesis: B2B SaaS landing pages are noise; personality
+     + memorability beats yet-another-feature-grid.
+     Move: amplify the "Drools" calendar joke, dial up saturation,
+     bigger type, more breathing room, more wit per section. */
+
+  /* Hero — Brand-led: amplified calendar centerpiece */
+  .hero-c {
+    position: relative; overflow: hidden;
+    padding: 64px 0 120px;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(234,110,27,0.18), transparent 35%),
+      radial-gradient(circle at 80% 0%, rgba(255,225,105,0.30), transparent 40%),
+      linear-gradient(180deg, #7b68ee 0%, #a195f3 35%, #d6cffa 65%, #ffffff 100%);
+  }
+  .hero-c .pre-chips { display: flex; gap: 12px; margin-bottom: 32px; }
+  .pre-chip {
+    background: rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 999px; padding: 7px 16px; font-size: 13px; font-weight: 500;
+    color: #1a1a1a;
+  }
+  .hero-c h1 {
+    font-family: 'Unbounded', sans-serif; font-weight: 800;
+    font-size: clamp(48px, 7vw, 92px); line-height: 0.96;
+    letter-spacing: -0.04em; margin-bottom: 28px; color: #0a0a0a;
+    max-width: 900px;
+  }
+  .hero-c h1 .swap {
+    color: var(--orange); position: relative; display: inline-block;
+    transform: rotate(-2deg);
+  }
+  .hero-c h1 .swap::after {
+    content: ""; position: absolute; left: -4px; right: -4px; bottom: 4px;
+    height: 12px; background: rgba(255,225,105,0.6); z-index: -1;
+    border-radius: 4px;
+  }
+  .hero-c .sub {
+    font-size: clamp(18px, 1.5vw, 22px); line-height: 1.45; color: #1a1a1a;
+    max-width: 580px; margin-bottom: 36px; font-weight: 400;
+  }
+  .hero-c .ctas { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+  .hero-c .btn-character {
+    background: #1a1a1a; color: #fff; border-radius: 999px;
+    padding: 16px 32px; font-size: 16px; font-weight: 600;
+    border: 0; cursor: pointer; font-family: inherit;
+    transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+    transform: rotate(-1deg);
+  }
+  .hero-c .btn-character:hover { transform: rotate(0deg) scale(1.04); }
+  .hero-c .trust { font-size: 14px; color: #2a2a2a; font-weight: 500; }
+
+  /* Calendar centerpiece — the brand signature, amplified */
+  .calendar-centerpiece {
+    margin: 64px auto 0; max-width: 880px;
+    background: #fff; border-radius: 24px;
+    border: 2px solid rgba(0,0,0,0.08);
+    box-shadow: 0 32px 80px -32px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.05);
+    overflow: hidden; position: relative;
+    transform: rotate(-1.2deg);
+  }
+  .calendar-centerpiece .cal-chrome {
+    background: #fafafa; border-bottom: 1px solid rgba(0,0,0,0.06);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px; font-family: ui-monospace, monospace; font-size: 13px;
+  }
+  .calendar-centerpiece .cal-chrome .month { font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 14px; }
+  .calendar-centerpiece .cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 1px; padding: 1px; background: var(--border);
+  }
+  .calendar-centerpiece .cal-cell {
+    background: #fff; aspect-ratio: 1; padding: 10px;
+    font-family: 'Unbounded', sans-serif; font-size: 14px; font-weight: 500;
+    color: #1a1a1a; position: relative;
+    display: flex; flex-direction: column;
+  }
+  .calendar-centerpiece .cal-cell.head {
+    background: #fafafa; aspect-ratio: auto; padding: 8px;
+    font-size: 11px; color: var(--muted-foreground); font-weight: 500;
+    text-align: center;
+  }
+  .calendar-centerpiece .cal-cell.dim { color: #ccc; }
+  .calendar-centerpiece .cal-cell .drool-drop {
+    position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+    width: 12px; height: 18px; background: var(--lavender); opacity: 0.5;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  }
+  .calendar-centerpiece .cal-cell.empty {
+    background: linear-gradient(180deg, #fff 60%, rgba(123,104,238,0.08) 100%);
+  }
+  .calendar-centerpiece .cal-cell.empty .drool-text {
+    position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%);
+    font-family: 'Unbounded', sans-serif; font-size: 9px;
+    color: var(--lavender); font-weight: 500; letter-spacing: 0.02em;
+  }
+  .calendar-centerpiece .cal-cell.has-event {
+    background: var(--orange); color: #fff;
+  }
+  .calendar-centerpiece .cal-cell.has-event small {
+    font-size: 9px; font-weight: 400; margin-top: auto; opacity: 0.9;
+  }
+  .calendar-centerpiece .cal-overlay-text {
+    position: absolute; right: 24px; bottom: 24px; transform: rotate(-6deg);
+    font-family: 'Unbounded', sans-serif; font-size: 60px; font-weight: 800;
+    color: var(--lavender); opacity: 0.85;
+    text-shadow: 3px 3px 0 #fff;
+    pointer-events: none;
+    letter-spacing: -0.04em;
+  }
+
+  /* Sections — generous breathing room */
+  section.airy { padding: 128px 0; }
+  section.airy.tighter { padding: 96px 0; }
+
+  .section-title-c {
+    font-family: 'Unbounded', sans-serif; font-weight: 700;
+    font-size: clamp(40px, 5.5vw, 72px);
+    line-height: 1; letter-spacing: -0.035em;
+  }
+
+  /* Feature grid — 2x2 (not 4x1) for breathing room */
+  .feature-grid-c { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  @media (max-width: 800px) { .feature-grid-c { grid-template-columns: 1fr; } }
+  .feature-card-c {
+    background: #fff; border: 1px solid var(--border); border-radius: 22px;
+    padding: 48px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .feature-card-c .visual { aspect-ratio: 16/9; min-height: 180px; }
+  .feature-card-c h4 {
+    font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 700;
+    line-height: 1.1; letter-spacing: -0.02em;
+  }
+  .feature-card-c p { color: var(--muted-foreground); font-size: 15.5px; line-height: 1.55; }
+
+  /* Use cases — 3 stacked rows, alternating image side */
+  .use-case-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    margin-bottom: 96px;
+  }
+  .use-case-row:nth-child(even) > div:first-child { order: 2; }
+  @media (max-width: 800px) { .use-case-row { grid-template-columns: 1fr; gap: 32px; } .use-case-row:nth-child(even) > div:first-child { order: 1; } }
+  .use-case-row .visual {
+    aspect-ratio: 4/3; min-height: 280px;
+    background: linear-gradient(135deg, rgba(123,104,238,0.10), rgba(234,110,27,0.10));
+    border-radius: 22px; padding: 32px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .use-case-row h3 {
+    font-family: 'Unbounded', sans-serif; font-size: clamp(28px, 3.5vw, 44px);
+    line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 16px;
+  }
+  .use-case-row p { font-size: 17px; line-height: 1.55; color: #2a2a2a; }
+
+  /* Speed wins — large oversized stats */
+  .speed-stats-c {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .speed-stat-c { padding: 64px 32px; text-align: center; border-right: 1px solid var(--border); }
+  .speed-stat-c:last-child { border-right: 0; }
+  .speed-stat-c .num {
+    font-family: 'Unbounded', sans-serif; font-weight: 800;
+    font-size: clamp(72px, 10vw, 140px); line-height: 1; letter-spacing: -0.04em;
+    color: var(--orange);
+  }
+  .speed-stat-c .lbl { font-size: 15px; color: var(--muted-foreground); margin-top: 14px; line-height: 1.5; max-width: 240px; margin-left: auto; margin-right: auto; }
+  @media (max-width: 800px) {
+    .speed-stats-c { grid-template-columns: 1fr; }
+    .speed-stat-c { border-right: 0; border-bottom: 1px solid var(--border); padding: 48px 24px; }
+    .speed-stat-c:last-child { border-bottom: 0; }
+  }
+
+  /* ROI calc */
+  .roi-card-c {
+    background: linear-gradient(135deg, #faf5ff 0%, #fff8f1 100%);
+    border-radius: 28px; padding: 48px; border: 1px solid rgba(0,0,0,0.06);
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: stretch;
+  }
+  @media (max-width: 800px) { .roi-card-c { grid-template-columns: 1fr; padding: 32px; } }
+  .roi-card-c label { display: block; font-size: 13px; color: var(--muted-foreground); margin-bottom: 8px; font-weight: 500; }
+  .roi-card-c .slider-display {
+    background: #fff; padding: 14px 18px; border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 20px;
+  }
+  .roi-card-c .sliders > div { margin-bottom: 24px; }
+  .roi-card-c .result {
+    background: #1a1a1a; color: #fff; border-radius: 18px; padding: 36px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .roi-card-c .result .small { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .roi-card-c .result .big {
+    font-family: 'Unbounded', sans-serif; font-weight: 700;
+    font-size: clamp(44px, 5.5vw, 72px); line-height: 1.05; letter-spacing: -0.035em;
+    background: linear-gradient(135deg, var(--orange) 0%, var(--yellow) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin: 8px 0 18px;
+  }
+
+  /* Compare table — playful */
+  .compare-c {
+    background: #fff; border-radius: 22px; border: 1px solid var(--border); overflow: hidden;
+  }
+  .compare-c table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  .compare-c th, .compare-c td { padding: 18px 20px; text-align: left; border-bottom: 1px solid var(--border); }
+  .compare-c th { font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted-foreground); }
+  .compare-c .ours { background: linear-gradient(180deg, rgba(234,110,27,0.06) 0%, rgba(255,225,105,0.04) 100%); font-weight: 600; color: var(--orange); }
+  .compare-c .check { color: var(--green); font-weight: 700; font-size: 18px; }
+  .compare-c .x { color: #ccc; font-size: 18px; }
+
+  /* Pull-quote testimonials — full width */
+  .pull-quote {
+    text-align: center; max-width: 940px; margin: 0 auto;
+    padding: 64px 32px; position: relative;
+  }
+  .pull-quote::before {
+    content: """; font-family: 'Unbounded', sans-serif; font-size: 220px;
+    color: rgba(123,104,238,0.12); line-height: 1; position: absolute;
+    top: 0; left: 0; pointer-events: none;
+  }
+  .pull-quote blockquote {
+    font-family: 'Unbounded', sans-serif; font-weight: 600;
+    font-size: clamp(22px, 2.6vw, 36px); line-height: 1.25; letter-spacing: -0.02em;
+    margin-bottom: 32px; position: relative;
+  }
+  .pull-quote .meta {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: 14px; color: var(--muted-foreground);
+  }
+  .pull-quote .avatar { width: 48px; height: 48px; border-radius: 50%; }
+  .pull-quote .meta b { font-family: 'Unbounded', sans-serif; color: var(--foreground); font-size: 15px; }
+
+  /* Pricing */
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
+  .price-card-c {
+    background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 40px;
+    display: flex; flex-direction: column;
+  }
+  .price-card-c.featured {
+    background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
+    color: #fff; border: 0;
+    transform: scale(1.04) rotate(0.5deg); position: relative;
+    box-shadow: 0 32px 80px -24px rgba(123,104,238,0.4);
+  }
+  .price-card-c.featured .badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--orange); color: #fff; font-size: 12px; padding: 6px 14px;
+    border-radius: 999px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .price-card-c h3 { font-family: 'Unbounded', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .price-card-c .price { font-family: 'Unbounded', sans-serif; font-size: 56px; font-weight: 700; line-height: 1; margin: 20px 0 6px; letter-spacing: -0.03em; }
+  .price-card-c .price small { font-size: 14px; font-weight: 400; color: var(--muted-foreground); margin-left: 6px; }
+  .price-card-c.featured .price small { color: rgba(255,255,255,0.5); }
+  .price-card-c ul { list-style: none; margin: 24px 0; flex: 1; }
+  .price-card-c li { padding: 10px 0; font-size: 14.5px; padding-left: 24px; position: relative; }
+  .price-card-c li::before { content: "✓"; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+
+  /* Final CTA — big, brand-loud */
+  .final-cta-c {
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,225,105,0.4), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(234,110,27,0.5), transparent 50%),
+      linear-gradient(135deg, #7b68ee 0%, #5e4cc7 100%);
+    color: #fff; text-align: center; padding: 144px 24px;
+    border-radius: 32px; margin: 48px auto; max-width: var(--container);
+    position: relative; overflow: hidden;
+  }
+  .final-cta-c h2 {
+    font-family: 'Unbounded', sans-serif; font-weight: 800;
+    font-size: clamp(44px, 6vw, 88px); font-weight: 700; line-height: 0.98;
+    letter-spacing: -0.035em; margin-bottom: 20px; position: relative;
+    max-width: 920px; margin-left: auto; margin-right: auto;
+  }
+  .final-cta-c p { font-size: 18px; color: rgba(255,255,255,0.85); margin-bottom: 36px; position: relative; }
+  .final-cta-c .btn-final {
+    background: #fff; color: var(--lavender); padding: 18px 36px;
+    font-size: 17px; font-weight: 700; border-radius: 999px; border: 0;
+    cursor: pointer; font-family: inherit;
+    transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+  }
+  .final-cta-c .btn-final:hover { transform: scale(1.05); }
+
+  /* Logo wall */
+  .logo-wall-c { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; align-items: center; }
+  @media (max-width: 800px) { .logo-wall-c { grid-template-columns: repeat(3, 1fr); } }
+
+  /* FAQ */
+  .faq-list { max-width: 880px; margin: 0 auto; }
+  .faq-item-c {
+    background: #fff; border: 1px solid var(--border); border-radius: 16px;
+    padding: 24px 28px; margin-bottom: 12px;
+  }
+  .faq-item-c summary { font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; align-items: center; cursor: pointer; letter-spacing: -0.01em; }
+  .faq-item-c summary::after { content: "+"; color: var(--orange); font-size: 24px; font-weight: 400; }
+  .faq-item-c[open] summary::after { content: "−"; }
+  .faq-item-c p { margin-top: 16px; color: var(--muted-foreground); font-size: 15px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<header class="nav-bar" style="margin-top: 8px;">
+  <img src="assets/logo.svg" alt="10demo" class="logo" />
+  <nav>
+    <a href="#features">Product</a>
+    <a href="#roi">Pricing</a>
+    <a href="#compare">Compare</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <div class="nav-actions">
+    <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 13.5px;">Sign in</button>
+    <button class="btn btn-primary" style="padding: 8px 16px; font-size: 13.5px; border-radius: 999px;">Start free</button>
+  </div>
+</header>
+
+<!-- ═══════════════ HERO — BRAND-LED, CALENDAR CENTERPIECE ═══════════════ -->
+<section class="hero-c">
+  <div class="container">
+    <div class="pre-chips">
+      <span class="pre-chip">For Sales Leaders</span>
+      <span class="pre-chip">For Growth Teams</span>
+    </div>
+    <h1>Stop making leads wait for <span class="swap">demo calls</span></h1>
+    <p class="sub">Live AI demos that adapt, qualify, book, and brief your reps. Because your demo calendar is full of drools.</p>
+    <div class="ctas">
+      <button class="btn-character">Experience Demo Now →</button>
+      <span class="trust">No credit card · 5 demos free</span>
+    </div>
+
+    <!-- The calendar centerpiece - amplified Drools -->
+    <div class="calendar-centerpiece">
+      <div class="cal-chrome">
+        <span class="month">DEMO CALENDAR · MAY 2026</span>
+        <span style="color: var(--muted-foreground);">Acme Co · 250 inbound / mo</span>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-cell head">SUN</div><div class="cal-cell head">MON</div><div class="cal-cell head">TUE</div><div class="cal-cell head">WED</div><div class="cal-cell head">THU</div><div class="cal-cell head">FRI</div><div class="cal-cell head">SAT</div>
+        <div class="cal-cell dim">27</div><div class="cal-cell dim">28</div><div class="cal-cell dim">29</div><div class="cal-cell dim">30</div><div class="cal-cell empty">1<span class="drool-text">drool</span></div><div class="cal-cell empty">2<span class="drool-text">drool</span></div><div class="cal-cell dim">3</div>
+        <div class="cal-cell dim">4</div><div class="cal-cell empty">5<span class="drool-text">drool</span></div><div class="cal-cell has-event">6<small>Initech discovery</small></div><div class="cal-cell empty">7<span class="drool-text">drool</span></div><div class="cal-cell empty">8<span class="drool-text">drool</span></div><div class="cal-cell empty">9<span class="drool-text">drool</span></div><div class="cal-cell dim">10</div>
+        <div class="cal-cell dim">11</div><div class="cal-cell empty">12<span class="drool-text">drool</span></div><div class="cal-cell empty">13<span class="drool-text">drool</span></div><div class="cal-cell has-event">14<small>Globex walkthrough</small></div><div class="cal-cell empty">15<span class="drool-text">drool</span></div><div class="cal-cell empty">16<span class="drool-text">drool</span></div><div class="cal-cell dim">17</div>
+        <div class="cal-cell dim">18</div><div class="cal-cell empty">19<span class="drool-text">drool</span></div><div class="cal-cell empty">20<span class="drool-text">drool</span></div><div class="cal-cell empty">21<span class="drool-text">drool</span></div><div class="cal-cell has-event">22<small>Stark Industries</small></div><div class="cal-cell empty">23<span class="drool-text">drool</span></div><div class="cal-cell dim">24</div>
+      </div>
+      <div class="cal-overlay-text">DROOLS</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURE GRID — 2x2 BREATHING ═══════════════ -->
+<section id="features" class="airy">
+  <div class="container-tight">
+    <p class="eyebrow text-center mb-2">Live demo, on the call</p>
+    <h2 class="section-title-c text-center mb-4" style="max-width: 800px; margin-left: auto; margin-right: auto;">Live AI demos that adapt, qualify, book, and brief your reps.</h2>
+
+    <div class="feature-grid-c mt-4">
+      <div class="feature-card-c">
+        <div class="placeholder visual"><strong>Booking-card animation</strong><small>real product UI · Full pass</small></div>
+        <h4>Qualifies and books in the same call.</h4>
+        <p>Asks the right questions in flow, then drops a booking card mid-conversation — without ever sending the prospect to a form.</p>
+      </div>
+      <div class="feature-card-c">
+        <div class="placeholder visual"><strong>Lead research overlay</strong><small>real product UI · Full pass</small></div>
+        <h4>Researches your leads as soon as the call starts.</h4>
+        <p>Pulls firmographics, role, intent, and recent activity before saying hello. Every demo opens with context, not "what brings you in?"</p>
+      </div>
+      <div class="feature-card-c">
+        <div class="placeholder visual"><strong>Qualification filter</strong><small>real product UI · Full pass</small></div>
+        <h4>Only qualified leads make it to your reps.</h4>
+        <p>If the prospect doesn't qualify, no booking is offered. Your reps stop spending slots on ghosts. Stop losing deals to "we'll get back to you."</p>
+      </div>
+      <div class="feature-card-c">
+        <div class="placeholder visual"><strong>Slack message</strong><small>real product UI · Full pass</small></div>
+        <h4>Get Slack updates after each call.</h4>
+        <p>Hot lead briefs, conversation highlights, and next-step suggestions land in your channel before the next call ends.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ROI CALCULATOR ═══════════════ -->
+<section id="roi" class="airy" style="background: #faf5ff;">
+  <div class="container-tight">
+    <p class="eyebrow text-center mb-2">Run the math</p>
+    <h2 class="section-title-c text-center mb-2" style="max-width: 800px; margin-left: auto; margin-right: auto;">How much pipeline are you leaving on the table?</h2>
+    <p class="text-center text-muted mb-4">Drag the sliders. We'll do the math using the no-show and qualification rates our customers actually see.</p>
+
+    <div class="roi-card-c mt-4">
+      <div class="sliders">
+        <div>
+          <label>Inbound demos / month</label>
+          <div class="slider-display"><span>250</span><span style="font-size: 13px; color: var(--muted-foreground);">drag →</span></div>
+          <div class="placeholder" style="height: 16px; padding: 0; margin-top: 8px;"><small>slider track placeholder</small></div>
+        </div>
+        <div>
+          <label>Qualified-on-call rate today</label>
+          <div class="slider-display"><span>22%</span><span style="font-size: 13px; color: var(--muted-foreground);">drag →</span></div>
+          <div class="placeholder" style="height: 16px; padding: 0; margin-top: 8px;"><small>slider track placeholder</small></div>
+        </div>
+        <div>
+          <label>Avg contract value</label>
+          <div class="slider-display"><span>$45,000</span><span style="font-size: 13px; color: var(--muted-foreground);">drag →</span></div>
+          <div class="placeholder" style="height: 16px; padding: 0; margin-top: 8px;"><small>slider track placeholder</small></div>
+        </div>
+      </div>
+      <div class="result">
+        <span class="small">Incremental pipeline / quarter</span>
+        <div class="big">$392,470</div>
+        <button class="btn btn-orange">Claim this pipeline →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ONE AGENT — STACKED USE CASES ═══════════════ -->
+<section class="airy">
+  <div class="container">
+    <p class="eyebrow text-center mb-2">One agent · three jobs</p>
+    <h2 class="section-title-c text-center mb-6" style="max-width: 880px; margin-left: auto; margin-right: auto;">One agent across marketing, sales, and customer success.</h2>
+
+    <div class="use-case-row">
+      <div class="visual"><div class="placeholder" style="background: rgba(255,255,255,0.6); border-color: rgba(123,104,238,0.3);"><strong>Ad-click → Demo</strong><small>flow visualization</small></div></div>
+      <div>
+        <p class="eyebrow text-orange mb-2">Marketing</p>
+        <h3>Turn ad clicks into conversations.</h3>
+        <p>Drop the agent link into paid ads, outbound emails, and your homepage. Every click goes straight into a personalized demo, not a form. Forms are where leads go to die.</p>
+      </div>
+    </div>
+
+    <div class="use-case-row">
+      <div class="visual"><div class="placeholder" style="background: rgba(255,255,255,0.6); border-color: rgba(123,104,238,0.3);"><strong>Rep brief card</strong><small>flow visualization</small></div></div>
+      <div>
+        <p class="eyebrow text-orange mb-2">Sales</p>
+        <h3>Hand reps qualified meetings only.</h3>
+        <p>The agent runs discovery, qualifies in-conversation, and only books the meeting if the prospect is a fit. Your reps walk in already briefed — no more "tell me about your business" cold opens.</p>
+      </div>
+    </div>
+
+    <div class="use-case-row">
+      <div class="visual"><div class="placeholder" style="background: rgba(255,255,255,0.6); border-color: rgba(123,104,238,0.3);"><strong>Walkthrough mock</strong><small>flow visualization</small></div></div>
+      <div>
+        <p class="eyebrow text-orange mb-2">Customer Success</p>
+        <h3>Onboard customers without scheduling.</h3>
+        <p>Existing customers click through to a tailored walkthrough on demand. Adoption keeps moving when CSMs are heads-down on the next renewal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SPEED WINS DEMOS ═══════════════ -->
+<section class="airy" style="background: #1a1a1a; color: #fff;">
+  <div class="container-tight text-center">
+    <p class="eyebrow mb-2" style="color: rgba(255,255,255,0.5);">Speed wins demos</p>
+    <h2 class="section-title-c mb-2" style="color: #fff;">The 5-minute window decides every deal.</h2>
+    <p class="mb-6" style="color: rgba(255,255,255,0.7); max-width: 580px; margin: 16px auto 0;">Lead Response Management Study, Oldroyd (MIT). Your best leads go cold waiting 48–72 hours for a human.</p>
+  </div>
+  <div class="container mt-6" style="max-width: 1240px;">
+    <div class="speed-stats-c" style="border-color: rgba(255,255,255,0.1);">
+      <div class="speed-stat-c" style="border-color: rgba(255,255,255,0.1);">
+        <div class="num">391%</div>
+        <div class="lbl" style="color: rgba(255,255,255,0.6);">conversion lift when leads contacted within 5 min</div>
+      </div>
+      <div class="speed-stat-c" style="border-color: rgba(255,255,255,0.1);">
+        <div class="num">21+</div>
+        <div class="lbl" style="color: rgba(255,255,255,0.6);">languages — every prospect gets a native demo</div>
+      </div>
+      <div class="speed-stat-c" style="border-color: rgba(255,255,255,0.1);">
+        <div class="num">78%</div>
+        <div class="lbl" style="color: rgba(255,255,255,0.6);">of customers report qualified-pipeline lift</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ GTM STACK LOGO WALL ═══════════════ -->
+<section class="airy tighter">
+  <div class="container-tight text-center">
+    <p class="eyebrow mb-2">Built for your GTM stack.</p>
+    <h2 class="font-display" style="font-size: clamp(28px, 3.5vw, 44px); margin-bottom: 40px; letter-spacing: -0.02em;">Plugs into the tools your team already runs on.</h2>
+    <div class="logo-wall-c">
+      <div class="placeholder" style="min-height: 64px;"><small>Salesforce</small></div>
+      <div class="placeholder" style="min-height: 64px;"><small>HubSpot</small></div>
+      <div class="placeholder" style="min-height: 64px;"><small>Slack</small></div>
+      <div class="placeholder" style="min-height: 64px;"><small>Calendly</small></div>
+      <div class="placeholder" style="min-height: 64px;"><small>Segment</small></div>
+      <div class="placeholder" style="min-height: 64px;"><small>Outreach</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ COMPARE TABLE ═══════════════ -->
+<section id="compare" class="airy" style="background: var(--muted);">
+  <div class="container">
+    <p class="eyebrow text-center mb-2">The receipts</p>
+    <h2 class="section-title-c text-center mb-4">How 10Demo compares to the three other options.</h2>
+    <div class="compare-c mt-4">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th class="ours" style="text-align: left; color: var(--orange);">10Demo</th>
+            <th>Static demo platforms</th>
+            <th>Recorded video tours</th>
+            <th>Live human demos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Real-time conversation</td><td class="ours">Voice + screen share</td><td><span class="x">✗</span></td><td><span class="x">✗</span></td><td><span class="check">✓</span> Once a rep is free</td></tr>
+          <tr><td>Qualifies inside the conversation</td><td class="ours">Adapts on the fly</td><td>Form before the call</td><td><span class="x">✗</span></td><td><span class="check">✓</span></td></tr>
+          <tr><td>Reads role and adapts</td><td class="ours">Per visitor</td><td><span class="x">Generic</span></td><td><span class="x">Generic</span></td><td><span class="check">✓</span></td></tr>
+          <tr><td>Books in the same call</td><td class="ours">Mid-conversation</td><td><span class="x">✗</span></td><td><span class="x">✗</span></td><td>After the call</td></tr>
+          <tr><td>Available 24/7, every timezone</td><td class="ours"><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="x">Business hours</span></td></tr>
+          <tr><td>Posts intel to Slack + CRM</td><td class="ours">Auto</td><td>Manual</td><td>Manual</td><td>Manual entry</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-center text-muted mt-2" style="font-size: 13px;">Swipe to compare across all four · vs. Arcade, Consensus, Demostack, Navattic, Reprise, Storylane, Supademo, Walnut</p>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIALS — PULL QUOTES ═══════════════ -->
+<section class="airy">
+  <div class="container">
+    <p class="eyebrow text-center mb-2">What our customers say</p>
+    <div class="pull-quote">
+      <blockquote>Demo quality is finally consistent. Whether the prospect is in Tokyo or Berlin, they get the same perfect demo in their native language.</blockquote>
+      <div class="meta">
+        <div class="avatar" style="background: linear-gradient(135deg, var(--lavender), var(--orange));"></div>
+        <span><b>Articos</b> · Founder</span>
+      </div>
+    </div>
+    <hr style="border: 0; border-top: 1px solid var(--border); max-width: 940px; margin: 48px auto;" />
+    <div class="pull-quote">
+      <blockquote>Integration with Salesforce was seamless. Every demo, question, and follow-up task logged automatically. Finally, 100% CRM data quality without manual entry.</blockquote>
+      <div class="meta">
+        <div class="avatar" style="background: linear-gradient(135deg, var(--orange), var(--yellow));"></div>
+        <span><b>Wellows</b> · Founder</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PRICING ═══════════════ -->
+<section class="airy" style="background: var(--muted);">
+  <div class="container">
+    <p class="eyebrow text-center mb-2">Pricing</p>
+    <h2 class="section-title-c text-center mb-4">Start free. Scale when the pipeline does.</h2>
+    <div class="pricing-grid mt-4">
+      <div class="price-card-c">
+        <h3>Free</h3>
+        <p class="text-muted" style="font-size: 14px;">Try the agent end-to-end</p>
+        <div class="price">$0<small>/ month</small></div>
+        <ul>
+          <li>5 demos / month</li>
+          <li>Up to 10 URLs in knowledge base</li>
+          <li>Up to 5 files in knowledge base</li>
+          <li>Email support</li>
+        </ul>
+        <button class="btn btn-secondary" style="border-radius: 999px;">Start free</button>
+      </div>
+      <div class="price-card-c featured">
+        <span class="badge">Popular</span>
+        <h3>Startup</h3>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6);">For teams running real volume</p>
+        <div class="price">$149<small>/ month</small></div>
+        <ul>
+          <li>Unlimited concurrent calls</li>
+          <li>Up to 300 URLs in knowledge base</li>
+          <li>Up to 200 files in knowledge base</li>
+          <li>Slack and email notifications</li>
+          <li>Full analytics dashboard</li>
+        </ul>
+        <button class="btn btn-orange" style="border-radius: 999px;">Start Startup</button>
+      </div>
+      <div class="price-card-c">
+        <h3>Scale</h3>
+        <p class="text-muted" style="font-size: 14px;">For 1,000+ demos / month</p>
+        <div class="price">Custom</div>
+        <ul>
+          <li>Unlimited AI agents</li>
+          <li>1,000+ calls/month</li>
+          <li>Unlimited URLs and files</li>
+          <li>Multi-language (40+ languages)</li>
+          <li>Priority support · SLA</li>
+        </ul>
+        <button class="btn btn-secondary" style="border-radius: 999px;">Talk to sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FINAL CTA ═══════════════ -->
+<section class="tight-a">
+  <div class="final-cta-c">
+    <h2>Run Product Demos 24/7 in Any Language</h2>
+    <p>Start free, no credit card required.</p>
+    <button class="btn-final">Experience Demo Now →</button>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section id="faq" class="airy" style="padding-top: 64px;">
+  <div class="container-tight">
+    <p class="eyebrow text-center mb-2">Frequently asked questions</p>
+    <h2 class="section-title-c text-center mb-4">Everything you need to know.</h2>
+    <div class="faq-list mt-4">
+      <details class="faq-item-c"><summary>Is 10Demo worth $149/mo when I could hire a sales rep for $150K/year?</summary><p>One mid-market SDR runs ~25 demos a week. 10Demo runs unlimited concurrent demos in 21+ languages, 24/7, and surfaces qualified leads only. The math holds at any team size.</p></details>
+      <details class="faq-item-c"><summary>How is 10Demo different from Consensus or Demostack?</summary><p>Those are static demo platforms — recorded screens with click-to-advance. 10Demo is a live AI agent that adapts to each prospect, qualifies them in the conversation, and books the meeting in the same call.</p></details>
+      <details class="faq-item-c"><summary>Does the AI sound natural or will prospects know it's not human?</summary><p>The AI is upfront — it identifies itself. What customers report is that prospects prefer it: zero scheduling friction, instant answers, and never a sales-pitch detour.</p></details>
+      <details class="faq-item-c"><summary>Can I customize how the AI presents demos and responds to prospects?</summary><p>Yes — knowledge base, tone, qualification rules, booking logic, and CRM hooks are all configurable.</p></details>
+      <details class="faq-item-c"><summary>Can AI really handle technical questions and objections?</summary><p>It handles 90%+ of inbound technical questions in customer deployments. For the rest, it routes the prospect to the right rep with a brief.</p></details>
+      <details class="faq-item-c"><summary>Is my product data and customer information secure?</summary><p>SOC 2 Type II, GDPR-compliant, end-to-end encrypted. Enterprise SSO, audit logs, and data residency available on Scale.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="grid-4">
+      <div>
+        <img src="assets/logo.svg" alt="10demo" style="height: 28px; filter: invert(1) brightness(2); margin-bottom: 16px;" />
+        <p style="font-size: 13.5px; color: #94a3b8; max-width: 240px;">Live AI demos that qualify, book, and brief — 24/7, in 21+ languages.</p>
+      </div>
+      <div>
+        <h5>Product</h5>
+        <ul><li><a href="#">Features</a></li><li><a href="#">Pricing</a></li><li><a href="#">Integrations</a></li><li><a href="#">Roadmap</a></li></ul>
+      </div>
+      <div>
+        <h5>Compare</h5>
+        <ul><li><a href="#">vs Arcade</a></li><li><a href="#">vs Consensus</a></li><li><a href="#">vs Demostack</a></li><li><a href="#">vs Navattic</a></li></ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul><li><a href="#">About</a></li><li><a href="#">Customers</a></li><li><a href="#">Privacy</a></li><li><a href="#">Refund policy</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 10demo. All rights reserved.</span>
+      
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+/* 10demo · Shared Brand Tokens — used by all 3 variants
+   Source of truth: ../brand-spec.md
+   Locked across A/B/C so the test isolates design hypothesis, not styling drift */
+
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Neutral axis (shadcn) */
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --primary: #171717;
+  --primary-foreground: #fafafa;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+
+  /* Brand signature */
+  --lavender: #7b68ee;
+  --lavender-soft: #a195f3;
+  --orange: #ea6e1b;
+  --golden: #f99c00;
+  --yellow: #ffe169;
+  --navy: #101828;
+  --green: #00c758;
+  --red: #fb2c36;
+  --sky: #3b82f6;
+
+  /* Hero gradient — locked brand signature */
+  --hero-gradient: linear-gradient(180deg, #7b68ee 0%, rgba(123,104,238,0.55) 35%, rgba(123,104,238,0.18) 70%, #ffffff 100%);
+
+  --radius: 0.625rem;
+  --container: 1200px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+.font-display { font-family: 'Unbounded', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.025em; }
+.font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+.container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+.container-tight { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 22px; border-radius: 10px; border: 1px solid transparent;
+  font-weight: 500; font-size: 14.5px; line-height: 1; cursor: pointer;
+  transition: opacity .15s, transform .15s, background .15s;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--primary); color: var(--primary-foreground); }
+.btn-primary:hover { opacity: 0.9; }
+.btn-orange { background: var(--orange); color: #fff; }
+.btn-orange:hover { background: #d05f12; }
+.btn-secondary { background: transparent; color: var(--foreground); border-color: var(--border); }
+.btn-secondary:hover { background: var(--muted); }
+.btn-lg { padding: 14px 28px; font-size: 15.5px; }
+
+/* ---------- Pill nav ---------- */
+.nav-bar {
+  position: sticky; top: 16px; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  width: min(1100px, calc(100% - 32px));
+  margin: 16px auto 0;
+  padding: 10px 14px 10px 22px;
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -16px rgba(0,0,0,0.18);
+}
+.nav-bar img.logo { height: 22px; width: auto; }
+.nav-bar nav { display: flex; gap: 28px; font-size: 14px; color: var(--muted-foreground); }
+.nav-bar nav a:hover { color: var(--foreground); }
+.nav-bar .nav-actions { display: flex; gap: 10px; align-items: center; }
+
+/* ---------- Sections ---------- */
+section { padding: 88px 0; }
+section.tight { padding: 64px 0; }
+
+.eyebrow {
+  font-size: 12.5px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.section-title {
+  font-family: 'Unbounded', sans-serif; font-weight: 700;
+  letter-spacing: -0.025em; line-height: 1.05;
+  font-size: clamp(32px, 4.2vw, 52px);
+  color: var(--foreground);
+}
+
+/* ---------- Junior pass placeholders ---------- */
+.placeholder {
+  background: repeating-linear-gradient(45deg, #f0f0f0 0 8px, #f8f8f8 8px 16px);
+  border: 1.5px dashed #c7c7c7; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px;
+  color: #555; font-size: 13px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 24px; text-align: center; min-height: 80px;
+}
+.placeholder small { color: #888; font-size: 11px; }
+.placeholder strong { color: #2a2a2a; }
+
+/* Junior reasoning block at top of each variant */
+.junior-banner {
+  position: sticky; top: 0; z-index: 100;
+  background: #1f1f1f; color: #f5f5f5;
+  font-size: 12.5px; line-height: 1.5;
+  padding: 10px 16px; display: flex; gap: 16px; align-items: center; justify-content: space-between;
+  font-family: ui-monospace, monospace;
+  border-bottom: 1px solid #333;
+}
+.junior-banner b { color: #ffe169; }
+.junior-banner button {
+  background: transparent; color: #f5f5f5; border: 1px solid #444;
+  padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;
+  font-family: inherit;
+}
+.junior-banner button:hover { background: #2a2a2a; }
+
+.reasoning-panel {
+  background: #faf7ff; border-bottom: 1px solid #e8dfff;
+  padding: 24px 0;
+  font-size: 14px; line-height: 1.6;
+}
+.reasoning-panel h3 { font-family: 'Unbounded', sans-serif; font-size: 16px; margin-bottom: 12px; color: var(--lavender); }
+.reasoning-panel ul { padding-left: 20px; }
+.reasoning-panel li { margin-bottom: 6px; }
+.reasoning-panel.hidden { display: none; }
+.reasoning-panel code { background: #ede5ff; padding: 1px 6px; border-radius: 3px; font-size: 12.5px; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 24px;
+}
+.card-feature h4 {
+  font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 17px;
+  letter-spacing: -0.01em; margin-bottom: 8px;
+}
+.card-feature p { color: var(--muted-foreground); font-size: 14.5px; }
+
+.muted-box { background: var(--muted); border-radius: 14px; padding: 28px; border: 1px solid transparent; }
+
+/* Grid utilities */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+@media (max-width: 900px) {
+  .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  background: var(--navy); color: #cbd5e1; padding: 64px 0 32px;
+  margin-top: 0;
+}
+.site-footer h5 { color: #fff; font-family: 'Unbounded', sans-serif; font-size: 13px; letter-spacing: 0.05em; margin-bottom: 14px; text-transform: uppercase; }
+.site-footer ul { list-style: none; }
+.site-footer ul li { margin-bottom: 8px; font-size: 13.5px; }
+.site-footer ul a:hover { color: #fff; }
+.site-footer .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); margin-top: 56px; padding-top: 24px; font-size: 12.5px; color: #94a3b8; display: flex; justify-content: space-between; }
+
+/* Tiny utilities */
+.text-muted { color: var(--muted-foreground); }
+.text-orange { color: var(--orange); }
+.text-lavender { color: var(--lavender); }
+.text-green { color: var(--green); }
+.text-center { text-align: center; }
+.mt-1 { margin-top: 8px; } .mt-2 { margin-top: 16px; } .mt-3 { margin-top: 24px; } .mt-4 { margin-top: 40px; } .mt-6 { margin-top: 64px; }
+.mb-1 { margin-bottom: 8px; } .mb-2 { margin-bottom: 16px; } .mb-3 { margin-bottom: 24px; } .mb-4 { margin-bottom: 40px; }
+
+/* Toggle reasoning button JS hook applied per-variant */
